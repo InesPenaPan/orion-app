@@ -25,9 +25,9 @@ const OverviewCard = () => {
     return (
         <div className="bg-white rounded-xl shadow-xl overflow-hidden p-6 border border-gray-100 transition duration-300 hover:shadow-2xl">
             
-            {/* Card Title - UPDATED: Removed border-b and added DollarSign icon */}
+            {/* Card Title */}
             <div className="flex items-center space-x-2 mb-6">
-                <h2 className="text-xl font-bold text-gray-900">
+                <h2 className="text-2xl font-bold text-gray-900">
                     Overview
                 </h2>
             </div>

@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Search } from 'lucide-react';
 
 import Sidebar from '../components/Sidebar'; 
-import Header from '../components/Header';
+import Header from '../basics/Header';
+import OpportunitiesTable from '../basics/OpportunitiesTable';
 
-const ClientListPage = () => {
+const OpportunityListPage = () => {
     // Centralized state to control the collapse status of the sidebar.
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
  
@@ -34,16 +35,20 @@ const ClientListPage = () => {
                 <Header />
 
                 <main className="flex-grow p-8 space-y-8"> 
-                    <h2 className="text-3xl font-bold text-gray-900 mb-3"> All Clients </h2>
+                    <h2 className="text-3xl font-bold text-gray-900 mb-3"> All Oportunities </h2>
 
                     {/* Seacrh Bar */}
-                    <div className="relative max-w-xl">
+                    <div className="relative w-ful">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
                             type="text"
                             placeholder="Search clients ..."
                             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150"
                         />
+                    </div>
+
+                    <div className="relative w-ful">
+                        <OpportunitiesTable />
                     </div>
                   
                 </main>
@@ -52,4 +57,4 @@ const ClientListPage = () => {
     );
 };
 
-export default ClientListPage;
+export default OpportunityListPage;

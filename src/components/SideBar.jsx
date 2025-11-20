@@ -1,12 +1,22 @@
-import { NavLink } from 'react-router-dom';
-import { Home, Users, UserCircle, Globe, Menu } from 'lucide-react'; 
+import { NavLink, useNavigate } from 'react-router-dom';
+import { Home, Users, UserCircle, Globe, Menu, TrendingUp, LogOut, Briefcase} from 'lucide-react'; 
 
 const Sidebar = ({ userName = "Demo User", userEmail = "user2349@gmail.com", userIcon = UserCircle, isCollapsed, toggleCollapse }) => {
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        const isConfirmed = window.confirm("¿Estás seguro de que deseas cerrar la sesión?");
+
+        if (isConfirmed) {
+            navigate('/'); 
+        } 
+    };
     
     const menuItems = [
         { name: 'Home', icon: Home, path: '/home' },
         { name: 'My Clients', icon: Users, path: '/portfolio' },
         { name: 'All Clients', icon: Globe, path: '/allclients' }, 
+        { name: 'Pipeline', icon: TrendingUp, path: '/pipeline' },
     ];
 
     return (
@@ -69,6 +79,39 @@ const Sidebar = ({ userName = "Demo User", userEmail = "user2349@gmail.com", use
                     </NavLink>
                 ))}
             </nav>
+            
+            {!isCollapsed && (
+                <div className={`p-4 mt-auto flex flex-col space-y-2`}>
+                    
+                    {/* Company Name/Branding */}
+                    <div className={`flex items-center text-gray-400 px-1`}>
+                        <Briefcase className={`w-4 h-4 mr-3`} /> 
+                        <span className="text-sm">CRM Analytics Corp.</span> 
+                    </div>
+                </div>
+            )}
+
+            {/* Logout */}
+            <div className={`w-full flex ${isCollapsed ? 'justify-center' : 'justify-end pr-3'} pb-4`}> 
+                <button 
+                    onClick={handleLogout}
+                    className={`
+                        flex items-center rounded-lg transition-colors duration-200 
+                        py-1 px-2 text-sm text-red-300 
+                        hover:bg-[#A52A2A] hover:text-white 
+                        hover:shadow-lg 
+                        ${isCollapsed ? 'justify-center' : ''}
+                    `}
+                    title="Logout"
+                >
+                    {!isCollapsed && (
+                        <span className="font-medium mr-2">Logout</span>
+                    )}
+                    
+                    <LogOut className={`w-4 h-4 ${isCollapsed ? '' : ''}`} /> 
+                </button>
+            </div>
+
         </div>
     );
 };

@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
+import { Search } from 'lucide-react';
+import { useLocation, useParams } from 'react-router-dom';
+
 import Sidebar from '../components/Sidebar'; 
 import Header from '../basics/Header';
-import OverviewCard from '../components/OverviewCard'; 
-import OpportunitiesCard from '../components/OpportunitiesCard';
-import ClientCard from '../components/ClientCard';
 
-const HomePage = () => {
+const ClientDetailPage = () => {
+
+    const location = useLocation(); 
+    const clientFullName = location.state?.clientFullName;
+    
     // Centralized state to control the collapse status of the sidebar.
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
  
@@ -35,24 +39,13 @@ const HomePage = () => {
                 <Header />
 
                 <main className="flex-grow p-8 space-y-8"> 
-                    
-                    <h1 className="text-4xl font-bold text-gray-900"> Dashboard Overview </h1>
-                    
-                    {/* ROW 1 */}
-                    <div className="w-full">
-                         <OverviewCard />
-                    </div>
-                    
-                    {/* ROW 2 */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <OpportunitiesCard />
-                        <ClientCard />
-                    </div>
-                    
+                     <h1 className="text-4xl font-bold text-gray-900">
+                        {clientFullName}
+                    </h1>
                 </main>
             </div>
         </div>
     );
 };
 
-export default HomePage;
+export default ClientDetailPage;
