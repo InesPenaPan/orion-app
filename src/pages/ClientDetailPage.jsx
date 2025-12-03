@@ -5,6 +5,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import Sidebar from '../components/Sidebar'; 
 import Header from '../basics/Header';
 import FinanceCard from '../components/FinanceCard';
+import OpportunitiesCard from '../components/OpportunitiesCard';
 
 const ClientDetailPage = () => {
 
@@ -50,7 +51,12 @@ const ClientDetailPage = () => {
                     <div className="max-w-7xl mx-auto w-full"> 
                         <FinanceCard />
                     </div>
-                    
+
+                    {/* ROW 2 */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <OpportunitiesCard />
+                    </div>
+
                 </main>
             </div>
         </div>
