@@ -4,6 +4,7 @@ import { useLocation, useParams } from 'react-router-dom';
 
 import Sidebar from '../components/Sidebar'; 
 import Header from '../basics/Header';
+import FinanceCard from '../components/FinanceCard';
 
 const ClientDetailPage = () => {
 
@@ -39,9 +40,17 @@ const ClientDetailPage = () => {
                 <Header />
 
                 <main className="flex-grow p-8 space-y-8"> 
-                     <h1 className="text-4xl font-bold text-gray-900">
+
+                    {/* CLIENT NAME */}
+                    <h1 className="text-4xl font-bold text-gray-900">
                         {clientFullName}
                     </h1>
+
+                    {/* FINANCE INFO */}
+                    <div className="max-w-7xl mx-auto w-full"> 
+                        <FinanceCard />
+                    </div>
+                    
                 </main>
             </div>
         </div>
