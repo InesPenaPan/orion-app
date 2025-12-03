@@ -6,6 +6,8 @@ import Sidebar from '../components/Sidebar';
 import Header from '../basics/Header';
 import FinanceCard from '../components/FinanceCard';
 import OpportunitiesCard from '../components/OpportunitiesCard';
+import SectorCard from '../components/SectorCard';
+import NewsCard from '../components/NewsCard';
 
 const ClientDetailPage = () => {
 
@@ -55,6 +57,12 @@ const ClientDetailPage = () => {
                     {/* ROW 2 */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <OpportunitiesCard />
+                        <SectorCard />
+                    </div>
+
+                    {/* NEWS */}
+                    <div className="max-w-7xl mx-auto w-full"> 
+                        <NewsCard />
                     </div>
 
                 </main>

@@ -1,4 +1,4 @@
-import Ratios from '../basics/Ratios';
+import RatioItem from '../basics/RatioItem';
 import BarGraphic from '../basics/BarGraphic';
 import NewsItem from '../basics/NewsItem';
 
@@ -26,6 +26,14 @@ const FinanceCard = () => {
         },
     ];
 
+    // Mock ratios
+    const ratiosData = [
+        { title: 'Metric #1', value: '0.56', isPositive: false }, 
+        { title: 'Metric #2', value: '0.34', isPositive: true }, 
+        { title: 'Metric #4', value: '0.81', isPositive: true },  
+        { title: 'Metric #5', value: '0.29', isPositive: true },  
+    ];
+
 
     return (
         <div className="bg-white rounded-xl shadow-xl overflow-hidden p-6 border border-gray-100 transition duration-300 hover:shadow-2xl">
@@ -41,7 +49,16 @@ const FinanceCard = () => {
 
                 {/* Ratios */}
                 <div className="md:col-span-3">
-                    <Ratios />
+                    <div className="grid grid-cols-2 gap-4">
+                        {ratiosData.map((ratio, index) => (
+                            <RatioItem 
+                                key={index}
+                                title={ratio.title}
+                                value={ratio.value}
+                                isPositive={ratio.isPositive}
+                            />
+                        ))}
+                    </div>
                 </div>
 
                 {/* Time series */}
