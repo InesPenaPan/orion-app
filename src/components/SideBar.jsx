@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Home, Users, UserCircle, Globe, Menu, TrendingUp, LogOut, Briefcase} from 'lucide-react'; 
 
-const Sidebar = ({ userName = "Demo User", userEmail = "user2349@gmail.com", userIcon = UserCircle, isCollapsed, toggleCollapse }) => {
+const SideBar = ({ userName = "Demo User", userEmail = "user2349@gmail.com", userIcon = UserCircle, isCollapsed, toggleCollapse }) => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -116,4 +116,4 @@ const Sidebar = ({ userName = "Demo User", userEmail = "user2349@gmail.com", use
     );
 };
 
-export default Sidebar;
+export default SideBar;

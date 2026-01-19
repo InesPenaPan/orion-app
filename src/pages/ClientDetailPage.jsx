@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Search } from 'lucide-react';
 import { useLocation, useParams } from 'react-router-dom';
 
-import Sidebar from '../components/Sidebar'; 
+import SideBar from '../components/SideBar'; 
 import Header from '../basics/Header';
 import FinanceCard from '../components/FinanceCard';
 import OpportunitiesCard from '../components/OpportunitiesCard';
@@ -29,7 +29,7 @@ const ClientDetailPage = () => {
             
             {/* SIDEBAR CONTAINER*/}
             <div className="fixed top-0 left-0 z-50">
-                <Sidebar 
+                <SideBar 
                     isCollapsed={isSidebarCollapsed} 
                     toggleCollapse={toggleSidebar} 
                 />

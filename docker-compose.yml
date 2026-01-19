@@ -1,0 +1,15 @@
+services:
+  react-frontend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    environment:
+      - GATEWAY=http://orion-gateway:8762 
+    networks:
+      - platform-network
+
+networks:
+  platform-network:
+    external: true
