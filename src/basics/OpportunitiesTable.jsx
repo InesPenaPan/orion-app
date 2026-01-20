@@ -1,28 +1,23 @@
-// MOCK DATA 
-const mockOpportunities = [
-    { name: 'License Renewal Q4', clientName: 'Tech Innovators Corp.', stage: 'Negotiation', expectedAmount: 50000, responsible: 'Juan Pérez', status: 'Abierta', probability: 80 },
-    { name: 'Solar Expansion Project', clientName: 'Global Energy Solutions', stage: 'Proposal Sent', expectedAmount: 350000, responsible: 'María López', status: 'Abierta', probability: 75 },
-    { name: 'Mobile POS Implementation', clientName: 'Retail Dynamics LLC', stage: 'Won', expectedAmount: 25000, responsible: 'Juan Pérez', status: 'Ganada', probability: 100 },
-    { name: 'New ERP/CRM Integration', clientName: 'Health Systems Inc.', stage: 'Qualification', expectedAmount: 120000, responsible: 'Pedro Ruiz', status: 'Abierta', probability: 30 },
-    { name: 'Maintenance Services', clientName: 'Automotive Future', stage: 'Closed', expectedAmount: 8000, responsible: 'María López', status: 'Perdida', probability: 0 },
-    { name: 'Infrastructure Upgrade', clientName: 'Tech Innovators Corp.', stage: 'Negotiation', expectedAmount: 150000, responsible: 'Juan Pérez', status: 'Abierta', probability: 60 },
-    { name: 'Cybersecurity Consulting', clientName: 'Global Energy Solutions', stage: 'Qualification', expectedAmount: 70000, responsible: 'María López', status: 'Abierta', probability: 45 },
-    { name: 'New Hardware Acquisition', clientName: 'Retail Dynamics LLC', stage: 'Proposal Sent', expectedAmount: 45000, responsible: 'Pedro Ruiz', status: 'Abierta', probability: 70 },
-    { name: 'Cloud Migration (AWS)', clientName: 'Health Systems Inc.', stage: 'Won', expectedAmount: 210000, responsible: 'Juan Pérez', status: 'Ganada', probability: 100 },
-    { name: 'Annual Support Contract', clientName: 'Automotive Future', stage: 'Negotiation', expectedAmount: 30000, responsible: 'María López', status: 'Abierta', probability: 90 },
-];
+import React, { useState, useEffect } from 'react';
 
+/**
+ * Helper function to determine Tailwind CSS classes based on the opportunity stage.
+ */
 const getStatusClasses = (status) => {
     switch (status) {
-        case 'Ganada':
+        case 'Won':
+        case 'Closed':
             return 'bg-green-100 text-green-700';
-        case 'Perdida':
+        case 'Lost':
             return 'bg-red-100 text-red-700';
         default:
             return 'bg-yellow-100 text-yellow-700';
     }
 };
 
+/**
+ * Formats numeric values into Euro currency string.
+ */
 const formatCurrency = (amount) => {
     return new Intl.NumberFormat('es-ES', { 
         style: 'currency', 
@@ -31,61 +26,106 @@ const formatCurrency = (amount) => {
     }).format(amount);
 };
 
-const OpportunitiesTable = ({ data = mockOpportunities }) => {
+/**
+ * Converts ISO date strings into a readable format (DD/MM/YYYY).
+ */
+const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+};
+
+const OpportunitiesTable = () => {
+    const [opportunities, setOpportunities] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                /**
+                 * API CALL VIA VITE PROXY
+                 * We use '/api' prefix so Vite intercepts the request and forwards it 
+                 * to the 'orion-gateway' container within the Docker network.
+                 */
+                const response = await fetch('/api/ms-crm/opportunities', {
+                    method: 'POST', 
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        targetMethod: "GET",
+                        queryParams: {},
+                        body: {}
+                    })
+                });
+
+                if (!response.ok) throw new Error(`Error ${response.status}: Fallo al conectar con el Gateway`);
+
+                const rawData = await response.json();
+                setOpportunities(rawData);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    if (loading) return <div className="p-10 text-center text-gray-500 italic">Obteniendo pipeline desde el CRM...</div>;
+    if (error) return <div className="p-10 text-center text-red-500 font-bold underline">Error: {error}</div>;
 
     return (
-        <table className="min-w-full divide-y divide-gray-200">
-                
-            <thead className="bg-gray-50 sticky top-0 z-10"> 
-                <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[180px]">
-                        Opportunity
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">
-                        Client Name
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">
-                        Stage
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">
-                        Expected Amount
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">
-                        Responsible
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Status
-                    </th>
-                </tr>
-            </thead>
-                
-            <tbody className="bg-white divide-y divide-gray-200">
-                {data.map((item, index) => (
-                    <tr key={index} className="hover:bg-gray-50 transition duration-150">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                            {item.name}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                            {item.clientName}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {item.stage}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold text-gray-800">
-                            {formatCurrency(item.expectedAmount)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {item.responsible}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-center">
-                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusClasses(item.status)}`}>
-                                {item.status}
-                            </span>
-                        </td>
+        <div className="overflow-x-auto shadow-md rounded-lg">
+            <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50 sticky top-0 z-10"> 
+                    <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Opportunity</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Description</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Client</th>
+                        <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Amount</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Responsible</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
+                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Stage</th>
                     </tr>
-                ))}
-            </tbody>
-        </table>
+                </thead>
+                {/* Table Body Section - Mapping over fetched data */}
+                <tbody className="bg-white divide-y divide-gray-200">
+                    {opportunities.map((item) => (
+                        <tr key={item.opportunityId} className="hover:bg-gray-50 transition duration-150">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-blue-900">
+                                {item.title}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
+                                {item.description || 'No description'}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                {item.client?.companyName || 'N/A'}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold text-gray-800">
+                                {formatCurrency(item.amountValue)}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {item.user?.fullName || 'Unassigned'}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 italic">
+                                {formatDate(item.createdAt)}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-center">
+                                <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusClasses(item.stage)}`}>
+                                    {item.stage}
+                                </span>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
     );
 };
 

@@ -7,4 +7,17 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
+
+  server: {
+    host: true,
+    port: 5173, 
+    proxy: {
+      '/api': {
+        target: 'http://orion-gateway-orion-gateway-1:8762',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
+  }
 })
