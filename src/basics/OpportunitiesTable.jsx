@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 /**
  * Helper function to determine Tailwind CSS classes based on the opportunity stage.
  */
-const getStatusClasses = (status) => {
+export const getStatusClasses = (status) => {
     switch (status) {
         case 'Won':
         case 'Closed':
@@ -18,7 +18,7 @@ const getStatusClasses = (status) => {
 /**
  * Formats numeric values into Euro currency string.
  */
-const formatCurrency = (amount) => {
+export const formatCurrency = (amount) => {
     return new Intl.NumberFormat('es-ES', { 
         style: 'currency', 
         currency: 'EUR',
@@ -29,7 +29,7 @@ const formatCurrency = (amount) => {
 /**
  * Converts ISO date strings into a readable format (DD/MM/YYYY).
  */
-const formatDate = (dateString) => {
+export const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     return new Date(dateString).toLocaleDateString('es-ES', {
         day: '2-digit',

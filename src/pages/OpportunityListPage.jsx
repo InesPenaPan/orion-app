@@ -5,10 +5,16 @@ import SideBar from '../components/SideBar';
 import Header from '../basics/Header';
 import OpportunitiesTable from '../basics/OpportunitiesTable';
 
+/**
+ * This page displays the global pipeline of opportunities.
+ * It features a responsive layout with a collapsible sidebar and a dynamic main content area.
+ */
 const OpportunityListPage = () => {
-    // Centralized state to control the collapse status of the sidebar.
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
  
+    /**
+     * Toggles the sidebar state between expanded and collapsed.
+     */
     const toggleSidebar = () => {
         setIsSidebarCollapsed(!isSidebarCollapsed);
     };
@@ -16,7 +22,6 @@ const OpportunityListPage = () => {
     const contentMarginClass = isSidebarCollapsed ? 'ml-16' : 'ml-64';
 
     return (
-        // Main container wraps the entire screen
         <div className="flex min-h-screen bg-gray-100">
             
             {/* SIDEBAR CONTAINER*/}
@@ -29,7 +34,6 @@ const OpportunityListPage = () => {
             
             {/* MAIN CONTENT AREA*/}
             <div 
-                // Apply the dynamic margin (ml-16 or ml-64) to push the content away from the fixed sidebar.
                 className={`flex flex-col flex-grow min-h-screen ${contentMarginClass} transition-all duration-300`}
             >
                 <Header />
