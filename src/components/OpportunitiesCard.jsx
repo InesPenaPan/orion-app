@@ -16,14 +16,8 @@ const OpportunitiesCard = () => {
                 </h2>
             </div>
             
-            <div className="max-h-96 overflow-auto">
+            <div className="max-h-120 overflow-auto">
                 <OpportunitiesTableUser />
-            </div>
-
-            <div className="mt-6 border-t border-gray-100 pt-4 text-right">
-                <button className="text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition duration-150">
-                    View All Opportunities &rarr;
-                </button>
             </div>
         </div>
     );
