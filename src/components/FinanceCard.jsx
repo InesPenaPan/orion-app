@@ -1,114 +1,89 @@
 import React, { useState, useEffect } from 'react';
-
 import RatioItem from '../basics/RatioItem';
-import BarGraphic from '../basics/BarGraphic';
+import TimeSeries from '../basics/TimeSeries';
 import NewsItem from '../basics/NewsItem';
 
+/**
+ * Displays financial health metrics, revenue growth trends, and real-time news 
+ * for a specific stock ticker by orchestrating multiple microservice calls.
+ */
 const FinanceCard = ({ ticker }) => {
     const [financialData, setFinancialData] = useState(null);
+    const [newsData, setNewsData] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchFinanceData = async () => {
+        const fetchAllData = async () => {
             if (!ticker) return;
-            
+            setLoading(true);
             try {
-                const response = await fetch(`/api/ms-finance/finance/${ticker}`, {
+                /**
+                 * The RequestTranslationFilter requires a POST request with an "envelope" body
+                 * to translate the call into a GET request for the internal microservices.
+                 */
+                const gatewayConfig = (method) => ({
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        targetMethod: "GET",
+                        targetMethod: method,
                         queryParams: {},
                         body: {}
                     })
                 });
 
-                if (response.ok) {
-                    const data = await response.json();
-                    setFinancialData(data);
+                /**
+                 * Execute parallel fetches to optimize performance
+                 */
+                const [financeRes, newsRes] = await Promise.all([
+                    fetch(`/api/ms-finance/finance/${ticker}`, gatewayConfig("GET")),
+                    fetch(`/api/ms-finance/news/${ticker}`, gatewayConfig("GET"))
+                ]);
+
+                if (financeRes.ok) setFinancialData(await financeRes.json());
+                if (newsRes.ok) {
+                    const nData = await newsRes.json();
+                    setNewsData(nData.latest_headlines || []);
                 }
             } catch (error) {
-                console.error("Error fetching finance data:", error);
+                console.error("Error connecting to ms-finance:", error);
             } finally {
                 setLoading(false);
             }
         };
-
-        fetchFinanceData();
+        fetchAllData();
     }, [ticker]);
 
-    // Mock news
-    const newsData = [
-        {
-            headline: 'Headline #1: El mercado de bonos reacciona a los nuevos tipos de la Fed',
-            summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            date: '2025-12-01',
-            source: 'Wall Street Journal'
-        },
-        {
-            headline: 'Headline #4: Las acciones de tecnología superan las expectativas del trimestre',
-            summary: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.',
-            date: '2025-11-28',
-            source: 'Reuters'
-        },
-        {
-            headline: 'Cambios en la directiva que afectan la estrategia a largo plazo',
-            summary: 'El nuevo CEO ha anunciado una reestructuración de la deuda y un enfoque en mercados emergentes para los próximos dos años.',
-            date: '2025-11-25',
-            source: 'Bloomberg'
-        },
-    ];
-
     /**
-     * Mapping financial metrics from JSON response to UI structure
+     * Financial Ratios Mapping
      */
     const ratiosData = financialData ? [
-        { 
-            title: 'Market Cap', 
-            value: (financialData.market_cap.current_value / 1e12).toFixed(2) + 'T', 
-            isPositive: financialData.market_cap.current_value >= financialData.market_cap.previous_value 
-        },
-        { 
-            title: 'Current Ratio', 
-            value: financialData.current_ratio.current_value.toFixed(3), 
-            isPositive: financialData.current_ratio.current_value >= financialData.current_ratio.previous_value 
-        },
-        { 
-            title: 'Quick Ratio', 
-            value: financialData.quick_ratio.current_value.toFixed(3), 
-            isPositive: financialData.quick_ratio.current_value >= financialData.quick_ratio.previous_value 
-        },
-        { 
-            title: 'Debt to Equity', 
-            value: financialData.debt_to_equity.current_value.toFixed(3), 
-            isPositive: financialData.debt_to_equity.current_value <= financialData.debt_to_equity.previous_value 
-        },
+        { title: 'Market Cap', value: (financialData.market_cap.current_value / 1e12).toFixed(2) + 'T', isPositive: financialData.market_cap.current_value >= financialData.market_cap.previous_value },
+        { title: 'Current Ratio', value: financialData.current_ratio.current_value.toFixed(3), isPositive: financialData.current_ratio.current_value >= financialData.current_ratio.previous_value },
+        { title: 'Quick Ratio', value: financialData.quick_ratio.current_value.toFixed(3), isPositive: financialData.quick_ratio.current_value >= financialData.quick_ratio.previous_value },
+        { title: 'Debt to Equity', value: financialData.debt_to_equity.current_value.toFixed(3), isPositive: financialData.debt_to_equity.current_value <= financialData.debt_to_equity.previous_value },
     ] : [];
 
     return (
-        <div className="bg-white rounded-xl shadow-xl overflow-hidden p-6 border border-gray-100 transition duration-300 hover:shadow-2xl">
+        <div className="w-full bg-white rounded-xl shadow-xl overflow-hidden py-6 px-8 border border-gray-100 transition duration-300 hover:shadow-2xl">
             
-            {/* Card Title */}
-            <div className="flex flex-col items-start space-y-2 mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">
-                    Finance Module
-                </h2>
-                {ticker ? (
-                    <span className="inline-flex items-center px-3 py-1 rounded-lg bg-gray-200 text-gray-700 text-sm font-mono font-bold border border-gray-300 shadow-sm">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-8 border-b border-gray-50 pb-4">
+                <div className="flex items-center space-x-4">
+                    <h2 className="text-2xl font-bold text-gray-900 tracking-tight italic">Finance Module</h2>
+                    {ticker && (
+                        <span className="px-4 py-1 rounded-lg bg-slate-100 text-slate-600 text-sm font-mono font-bold border border-slate-200 shadow-sm">
                         {ticker}
                     </span>
-                ) : (
-                    <span className="text-sm text-gray-400 italic">No ticker available</span>
-                )}
+                    )}
+                </div>
+                {loading && <div className="text-indigo-500 text-xs font-bold animate-pulse tracking-widest uppercase">Syncing...</div>}
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-9 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-10 gap-10 items-start">
 
-                {/* Ratios */}
-                <div className="md:col-span-3">
-                    <div className="grid grid-cols-2 gap-4">
+                {/* Section 1: Metrics (20%) */}
+                <div className="lg:col-span-2">
+                    <div className="flex flex-col space-y-4">
                         {ratiosData.map((ratio, index) => (
                             <RatioItem 
                                 key={index}
@@ -120,24 +95,43 @@ const FinanceCard = ({ ticker }) => {
                     </div>
                 </div>
 
-                {/* Time series */}
-                <div className="md:col-span-3 border-l border-gray-200 pl-6">
-                    <BarGraphic />
+                {/* Section 2: Expanded Chart (40%) */}
+                <div className="lg:col-span-4 border-x border-gray-100 px-8 h-full min-h-[250px] flex flex-col justify-center">
+                    <h3 className="text-[10px] font-black text-gray-400 uppercase mb-6 tracking-[0.3em] text-center">
+                        Revenue Growth Trend (%)
+                    </h3>
+                    <div className="h-56 w-full">
+                        <TimeSeries
+                            data={financialData?.quarterly_revenue_growth} 
+                            labels={financialData?.report_dates}
+                        />
+                    </div>
                 </div>
 
-                {/* News List */}
-                <div className="md:col-span-3 border-l border-gray-200 pl-6">
-                    <h3 className="text-lg font-semibold text-gray-700 mb-4">Stock news</h3>
-                    <div className="space-y-4 max-h-36 overflow-y-auto pr-2"> 
-                        {newsData.map((item, index) => (
-                            <NewsItem 
-                                key={index}
-                                headline={item.headline}
-                                summary={item.summary}
-                                date={item.date}
-                                source={item.source}
-                            />
-                        ))}
+                {/* Section 3: News (40%) */}
+                <div className="lg:col-span-4 pr-2">
+                    <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center mb-6">
+                        Market Insights
+                        <span className="ml-2 w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
+                    </h3>
+                    
+                    <div className="space-y-1 max-h-[350px] overflow-y-auto pr-4 custom-scrollbar"> 
+                        {newsData.length > 0 ? (
+                            newsData.map((item, index) => (
+                                <NewsItem 
+                                    key={index}
+                                    headline={item.title}
+                                    summary={item.summary}
+                                    date={new Date(item.publish_date).toLocaleDateString()}
+                                    source={item.publisher}
+                                    link={item.link} 
+                                />
+                            ))
+                        ) : (
+                            <div className="flex flex-col items-center justify-center py-20 text-gray-300">
+                                <p className="text-sm italic">Searching news...</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
