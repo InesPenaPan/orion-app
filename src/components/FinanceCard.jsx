@@ -69,11 +69,13 @@ const FinanceCard = ({ ticker }) => {
             {/* Header */}
             <div className="flex items-center justify-between mb-8 border-b border-gray-50 pb-4">
                 <div className="flex items-center space-x-4">
-                    <h2 className="text-2xl font-bold text-gray-900 tracking-tight italic">Finance Module</h2>
+                    <h2 className="text-2xl font-bold text-gray-900">
+                        Finance Module
+                    </h2>
                     {ticker && (
                         <span className="px-4 py-1 rounded-lg bg-slate-100 text-slate-600 text-sm font-mono font-bold border border-slate-200 shadow-sm">
-                        {ticker}
-                    </span>
+                            {ticker}
+                        </span>
                     )}
                 </div>
                 {loading && <div className="text-indigo-500 text-xs font-bold animate-pulse tracking-widest uppercase">Syncing...</div>}
