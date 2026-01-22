@@ -12,10 +12,10 @@ const ClientDetailPage = () => {
 
     const location = useLocation(); 
     const { 
+        clientId,
         clientFullName, 
         clientTicker, 
-        clientSector,
-        clientId 
+        clientSector
     } = location.state || {};
 
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -59,15 +59,14 @@ const ClientDetailPage = () => {
 
                     {/* ROW 2 */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <OpportunitiesCard />
+                        <OpportunitiesCard type="client" clientId={clientId} />
                         <SectorCard ticker={clientSector} />
                     </div>
 
                     {/* NEWS */}
                     <div className="max-w-7xl mx-auto w-full"> 
-                        <NewsCard />
+                        
                     </div>
-
                 </main>
             </div>
         </div>

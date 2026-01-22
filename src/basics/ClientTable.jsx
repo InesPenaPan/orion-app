@@ -76,6 +76,7 @@ const ClientTable = () => {
             `/client/${clientUrlName}`,
             { 
                 state: { 
+                    clientId: client.clientId,
                     clientFullName: client.companyName, 
                     clientTicker: client.ticker,       
                     clientSector: client.sector
