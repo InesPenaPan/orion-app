@@ -36,7 +36,7 @@ const ClientTable = () => {
                  * We use '/api' prefix so Vite intercepts the request and forwards it 
                  * to the 'orion-gateway' container within the Docker network.
                  */
-                const response = await fetch('/api/ms-crm/clients/1', {
+                const response = await fetch('/api/ms-crm/opportunities/clients/user/1', {
                     method: 'POST', 
                     headers: {
                         'Content-Type': 'application/json'
