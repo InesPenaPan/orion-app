@@ -73,7 +73,7 @@ const FinanceCard = ({ ticker }) => {
                         Finance Module
                     </h2>
                     {ticker && (
-                        <span className="px-4 py-1 rounded-lg bg-slate-100 text-slate-600 text-sm font-mono font-bold border border-slate-200 shadow-sm">
+                        <span className="px-4 py-1 rounded-lg text-sm font-mono font-bold border shadow-sm bg-[#00204A] text-white border-[#00204A]">
                             {ticker}
                         </span>
                     )}

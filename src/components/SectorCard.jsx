@@ -1,17 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import { Zap, Building2, BookOpen } from 'lucide-react';
 import RatioItem from '../basics/RatioItem';
-import TrendItem from '../basics/TrendItem';
 
+/**
+ * This component acts as a high-level dashboard for sectoral analysis. It aggregates 
+ * real-time market snapshots and dynamic industry insights into a single view.
+ */
 const SectorCard = ({ ticker }) => {
     const [marketData, setMarketData] = useState(null);
+    const [industryInsights, setIndustryInsights] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchSectorData = async () => {
+        const fetchAllSectorData = async () => {
             if (!ticker) return;
-            setLoading(true);
             
+            setLoading(true);
             try {
+                /**
+                 * We send a POST request to the Gateway. The Gateway's RequestTranslationFilter 
+                 * converts this into an internal GET request to the target microservice.
+                 */
                 const gatewayConfig = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -22,49 +31,85 @@ const SectorCard = ({ ticker }) => {
                     })
                 };
 
-                const response = await fetch(`/api/ms-sector-analysis/market/${ticker}`, gatewayConfig);
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    setMarketData(data);
+                const [marketRes, trendsRes] = await Promise.all([
+                    fetch(`/api/ms-sector-analysis/market/${ticker}`, gatewayConfig),
+                    fetch(`/api/ms-sector-analysis/trends/${ticker}`, gatewayConfig)
+                ]);
+
+                if (marketRes.ok) {
+                    const mData = await marketRes.json();
+                    setMarketData(mData);
                 }
+
+                if (trendsRes.ok) {
+                    const tData = await trendsRes.json();
+                    setIndustryInsights(tData);
+                }
+
             } catch (error) {
-                console.error("Error fetching sector metrics:", error);
+                console.error("Connectivity Error [Sector Analysis]:", error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchSectorData();
+        fetchAllSectorData();
     }, [ticker]);
 
-    const ratiosData = [
-        { title: 'Metric #1', value: '0.56', isPositive: false },
-        { title: 'Metric #2', value: '0.30', isPositive: false },
-        { title: 'Metric #3', value: '0.88', isPositive: true }
-    ];
+    /**
+     * Transforms raw JSON objects into the format required by the RatioItem basic component.
+     */
+    const ratiosData = marketData ? [
+        { 
+            title: 'Close Price', 
+            value: `$${marketData.last_close_price.current_value.toFixed(2)}`, 
+            isPositive: marketData.last_close_price.current_value >= marketData.last_close_price.previous_value 
+        },
+        { 
+            title: 'Market Cap', 
+            value: (marketData.market_cap.current_value / 1e9).toFixed(2) + 'B', 
+            isPositive: marketData.market_cap.current_value >= marketData.market_cap.previous_value 
+        },
+        { 
+            title: 'Daily Volume', 
+            value: (marketData.volume.current_value / 1e6).toFixed(2) + 'M', 
+            isPositive: marketData.volume.current_value >= marketData.volume.previous_value 
+        }
+    ] : [];
 
-    const trendsData = [
-        { title: 'Revenue', trendData: [10, 20, 15, 30, 25], isPositive: true },
-        { title: 'Expenses', trendData: [5, 8, 12, 10, 15], isPositive: false },
-        { title: 'Net Profit', trendData: [2, 4, 3, 6, 5], isPositive: true },
-    ];
+    /**
+     * Returns a Lucide icon based on the 'type' field in the suggestions JSON.
+     */
+    const getInsightIcon = (type) => {
+        if (type.includes('Company')) return <Building2 size={14} className="text-[#1E90FF]" />;
+        if (type.includes('Novel') || type.includes('Author')) return <BookOpen size={14} className="text-[#FFD700]" />;
+        return <Zap size={14} className="text-[#1E90FF]" />;
+    };
 
     return (
         <div className="bg-white rounded-xl shadow-xl overflow-hidden p-6 border border-gray-100 transition duration-300 hover:shadow-2xl">
             
-            {/* Card Title */}
-            <div className="flex items-center space-x-2 mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">
-                    Sector Analysis
-                </h2>
-                <span className="px-4 py-1 rounded-lg bg-slate-100 text-slate-600 text-sm font-mono font-bold border border-slate-200 shadow-sm">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-8 border-b border-gray-50 pb-4">
+                <div className="flex items-center space-x-3">
+                    <h2 className="text-2xl font-bold text-[#00204A] tracking-tight italic">
+                        Sector Analysis
+                    </h2>
+                    {ticker && (
+                        <span className="px-4 py-1 rounded-lg text-sm font-mono font-bold border shadow-sm bg-[#00204A] text-white border-[#00204A]">
                             {ticker}
-                </span>
+                        </span>
+                    )}
+                </div>
+                {loading && (
+                    <div className="text-[#1E90FF] text-[10px] font-bold animate-pulse uppercase tracking-[0.2em]">
+                        Syncing...
+                    </div>
+                )}
             </div>
 
-            {/* Ratios*/}
-            <div className="grid grid-cols-3 gap-4">
+            {/* Snapshots Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                 {ratiosData.map((ratio, index) => (
                     <RatioItem 
                         key={index}
@@ -75,23 +120,34 @@ const SectorCard = ({ ticker }) => {
                 ))}
             </div>
 
-            {/* Trends*/}
-            <h3 className="text-lg font-semibold text-gray-800 mb-4 mt-4">
-                Key Trends
-            </h3>
-            
-            <div className="space-y-3">
-                {trendsData.map((trend, index) => (
-                    <TrendItem 
-                        key={`trend-${index}`}
-                        title={trend.title}
-                        trendData={trend.trendData}
-                        isPositive={trend.isPositive}
-                    />
-                ))}
-            </div>
-
-
+            {/* Dynamic Industry Insights */}
+            <div className="pt-2">
+                <h3 className="text-[10px] font-black text-[#00204A]/40 uppercase tracking-[0.3em] mb-6">
+                    {industryInsights?.industry_name || 'Industry'} Insights
+                </h3>
+                
+                <div className="grid grid-cols-1 gap-3">
+                    {industryInsights?.suggestions?.map((item, index) => (
+                        <div 
+                            key={index}
+                            className="group flex items-center justify-between p-3 rounded-lg border border-gray-50 bg-gray-50/30 hover:bg-white hover:border-[#1E90FF]/20 hover:shadow-sm transition-all duration-300"
+                        >
+                            <div className="flex items-center space-x-3">
+                                <div className="transition-colors">
+                                    {getInsightIcon(item.type)}
+                                </div>
+                                <div>
+                                    <p className="text-sm font-bold text-[#00204A]">{item.title}</p>
+                                    <p className="text-[10px] text-gray-400 font-medium uppercase tracking-tighter">{item.type}</p>
+                                </div>
+                            </div>
+                            <div className="h-1 w-12 bg-gray-100 rounded-full overflow-hidden">
+                                <div className="h-full bg-[#1E90FF] opacity-60 animate-pulse w-2/3"></div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 };
