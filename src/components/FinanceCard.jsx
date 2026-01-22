@@ -1,8 +1,43 @@
+import React, { useState, useEffect } from 'react';
+
 import RatioItem from '../basics/RatioItem';
 import BarGraphic from '../basics/BarGraphic';
 import NewsItem from '../basics/NewsItem';
 
-const FinanceCard = () => {
+const FinanceCard = ({ ticker }) => {
+    const [financialData, setFinancialData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchFinanceData = async () => {
+            if (!ticker) return;
+            
+            try {
+                const response = await fetch(`/api/ms-finance/finance/${ticker}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        targetMethod: "GET",
+                        queryParams: {},
+                        body: {}
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setFinancialData(data);
+                }
+            } catch (error) {
+                console.error("Error fetching finance data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchFinanceData();
+    }, [ticker]);
 
     // Mock news
     const newsData = [
@@ -26,23 +61,47 @@ const FinanceCard = () => {
         },
     ];
 
-    // Mock ratios
-    const ratiosData = [
-        { title: 'Metric #1', value: '0.56', isPositive: false }, 
-        { title: 'Metric #2', value: '0.34', isPositive: true }, 
-        { title: 'Metric #4', value: '0.81', isPositive: true },  
-        { title: 'Metric #5', value: '0.29', isPositive: true },  
-    ];
-
+    /**
+     * Mapping financial metrics from JSON response to UI structure
+     */
+    const ratiosData = financialData ? [
+        { 
+            title: 'Market Cap', 
+            value: (financialData.market_cap.current_value / 1e12).toFixed(2) + 'T', 
+            isPositive: financialData.market_cap.current_value >= financialData.market_cap.previous_value 
+        },
+        { 
+            title: 'Current Ratio', 
+            value: financialData.current_ratio.current_value.toFixed(3), 
+            isPositive: financialData.current_ratio.current_value >= financialData.current_ratio.previous_value 
+        },
+        { 
+            title: 'Quick Ratio', 
+            value: financialData.quick_ratio.current_value.toFixed(3), 
+            isPositive: financialData.quick_ratio.current_value >= financialData.quick_ratio.previous_value 
+        },
+        { 
+            title: 'Debt to Equity', 
+            value: financialData.debt_to_equity.current_value.toFixed(3), 
+            isPositive: financialData.debt_to_equity.current_value <= financialData.debt_to_equity.previous_value 
+        },
+    ] : [];
 
     return (
         <div className="bg-white rounded-xl shadow-xl overflow-hidden p-6 border border-gray-100 transition duration-300 hover:shadow-2xl">
             
             {/* Card Title */}
-            <div className="flex items-center space-x-2 mb-6">
+            <div className="flex flex-col items-start space-y-2 mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">
                     Finance Module
                 </h2>
+                {ticker ? (
+                    <span className="inline-flex items-center px-3 py-1 rounded-lg bg-gray-200 text-gray-700 text-sm font-mono font-bold border border-gray-300 shadow-sm">
+                        {ticker}
+                    </span>
+                ) : (
+                    <span className="text-sm text-gray-400 italic">No ticker available</span>
+                )}
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-9 gap-6">

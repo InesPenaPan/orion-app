@@ -50,17 +50,11 @@ const ClientDetailPage = () => {
                         <h1 className="text-4xl font-bold text-gray-900">
                             {clientFullName}
                         </h1>
-                        {clientTicker && (
-                            <p className="text-xl font-mono text-blue-600 font-semibold">
-                                {clientTicker}
-                            </p>
-                        )}
                     </div>
-
 
                     {/* FINANCE INFO */}
                     <div className="max-w-7xl mx-auto w-full"> 
-                        <FinanceCard />
+                        <FinanceCard ticker={clientTicker} />
                     </div>
 
                     {/* ROW 2 */}
