@@ -11,9 +11,13 @@ import NewsCard from '../components/NewsCard';
 const ClientDetailPage = () => {
 
     const location = useLocation(); 
-    const clientFullName = location.state?.clientFullName;
-    
-    // Centralized state to control the collapse status of the sidebar.
+    const { 
+        clientFullName, 
+        clientTicker, 
+        clientSector,
+        clientId 
+    } = location.state || {};
+
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
  
     const toggleSidebar = () => {
@@ -23,7 +27,6 @@ const ClientDetailPage = () => {
     const contentMarginClass = isSidebarCollapsed ? 'ml-16' : 'ml-64';
 
     return (
-        // Main container wraps the entire screen
         <div className="flex min-h-screen bg-gray-100">
             
             {/* SIDEBAR CONTAINER*/}
@@ -36,17 +39,24 @@ const ClientDetailPage = () => {
             
             {/* MAIN CONTENT AREA*/}
             <div 
-                // Apply the dynamic margin (ml-16 or ml-64) to push the content away from the fixed sidebar.
                 className={`flex flex-col flex-grow min-h-screen ${contentMarginClass} transition-all duration-300`}
             >
                 <Header />
 
                 <main className="flex-grow p-8 space-y-8"> 
 
-                    {/* CLIENT NAME */}
-                    <h1 className="text-4xl font-bold text-gray-900">
-                        {clientFullName}
-                    </h1>
+                    {/* CLIENT NAME & TICKER */}
+                    <div className="space-y-1">
+                        <h1 className="text-4xl font-bold text-gray-900">
+                            {clientFullName}
+                        </h1>
+                        {clientTicker && (
+                            <p className="text-xl font-mono text-blue-600 font-semibold">
+                                {clientTicker}
+                            </p>
+                        )}
+                    </div>
+
 
                     {/* FINANCE INFO */}
                     <div className="max-w-7xl mx-auto w-full"> 
