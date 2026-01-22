@@ -3,7 +3,7 @@ import { Search } from 'lucide-react';
 
 import SideBar from '../components/SideBar'; 
 import Header from '../basics/Header';
-import ClientTable from '../basics/ClientTable';
+import ClientTableUser from '../basics/ClientTableUser';
 import ClientGraphic from '../basics/ClientGraphic';
 
 const ClientPortfolioPage = () => {
@@ -50,7 +50,7 @@ const ClientPortfolioPage = () => {
                             />
                             </div>
                             <div className="relative w-full">
-                                <ClientTable /> 
+                                <ClientTableUser /> 
                             </div>
                         </div>
 

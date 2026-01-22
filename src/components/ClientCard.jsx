@@ -1,5 +1,5 @@
 import ClientGraphic from '../basics/ClientGraphic';
-import ClientTable from '../basics/ClientTable';
+import ClientTableUser from '../basics/ClientTableUser';
 
 const ClientCard = () => {
   return (
@@ -9,7 +9,7 @@ const ClientCard = () => {
       </h2>
       <ClientGraphic /> 
       <div className="max-h-60 overflow-y-auto border border-gray-200 rounded-lg">
-        <ClientTable /> 
+        <ClientTableUser /> 
       </div>
 
     </div>

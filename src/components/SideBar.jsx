@@ -15,7 +15,7 @@ const SideBar = ({ userName = "Demo User", userEmail = "user2349@gmail.com", use
     const menuItems = [
         { name: 'Home', icon: Home, path: '/home' },
         { name: 'My Clients', icon: Users, path: '/portfolio' },
-        { name: 'All Clients', icon: Globe, path: '/allclients' }, 
+        { name: 'All Clients', icon: Globe, path: '/clients' }, 
         { name: 'Pipeline', icon: TrendingUp, path: '/pipeline' },
     ];
 

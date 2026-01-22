@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Search } from 'lucide-react';
 import { useLocation, useParams } from 'react-router-dom';
 
 import SideBar from '../components/SideBar'; 

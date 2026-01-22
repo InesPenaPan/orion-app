@@ -1,28 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {SECTOR_MAP, formatSector } from './ClientTable';
 
-/**
- * Mapping object to translate technical sector codes into readable names.
- * You can expand this as needed.
- */
-export const SECTOR_MAP = {
-    'XLF': 'Financial Services',
-    'XLY': 'Consumer Discretionary',
-    'XLK': 'Technology',
-    'XLV': 'Healthcare',
-    'XLE': 'Energy',
-    'XLI': 'Industrials'
-};
-
-/**
- * Helper function to transform the sector code.
- * If the code isn't in our map, it returns the original code or 'N/A'.
- */
-export const formatSector = (sectorCode) => {
-    return SECTOR_MAP[sectorCode] || sectorCode || 'N/A';
-};
-
-const ClientTable = () => {
+const ClientTableUser = () => {
     const [clients, setClients] = useState([]); 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -36,7 +16,7 @@ const ClientTable = () => {
                  * We use '/api' prefix so Vite intercepts the request and forwards it 
                  * to the 'orion-gateway' container within the Docker network.
                  */
-                const response = await fetch('/api/ms-crm/clients', {
+                const response = await fetch('/api/ms-crm/opportunities/clients/user/1', {
                     method: 'POST', 
                     headers: {
                         'Content-Type': 'application/json'
@@ -48,11 +28,18 @@ const ClientTable = () => {
                     })
                 });
 
-                if (!response.ok) throw new Error(`Error ${response.status}: Failed to fetch global client list`);
+                if (!response.ok) throw new Error(`Error ${response.status}: Fallo al conectar con el Gateway`);
                 
                 const rawData = await response.json();
 
-                setClients(Array.isArray(rawData) ? rawData : []);
+                /**
+                 * DATA TRANSFORMATION:
+                 * The backend returns a nested structure.
+                 * We use .flat() to convert [[ClientObject]] into [ClientObject] 
+                 * so the .map() function can access properties directly.
+                 */
+                const flattenedData = Array.isArray(rawData) ? rawData.flat() : [];
+                setClients(flattenedData);
 
             } catch (err) {
                 setError(err.message);
@@ -86,43 +73,33 @@ const ClientTable = () => {
     if (error) return <div className="p-10 text-center text-red-500 font-bold underline">Error: {error}</div>;
 
     return (
-        <div className="overflow-x-auto shadow-md border border-gray-200 rounded-xl"> 
+        <div className="overflow-x-auto shadow-sm border border-gray-200 rounded-lg"> 
             <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50 sticky top-0 z-10"> 
                     <tr>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Company</th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Ticker</th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Sector</th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tax ID</th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Website</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Client Name</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ticker</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Sector</th>
                     </tr>
                 </thead>
                     
                 <tbody className="bg-white divide-y divide-gray-200">
-                    {clients.map((item) => (
+                    {clients.map((item, index) => (
                         <tr 
-                            key={item.clientId}
+                            key={item.clientId || index}
                             onClick={() => handleRowClick(item)}
-                            className="hover:bg-blue-50 cursor-pointer transition duration-150 ease-in-out"
+                            className="hover:bg-blue-50 cursor-pointer transition duration-150"
                         >
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                 {item.companyName}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono bg-gray-50/50">
-                                {item.ticker || 'Private'}
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 font-mono">
+                                {item.ticker || 'N/A'} 
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                <span className="px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 border border-indigo-200">
+                                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">
                                     {formatSector(item.sector)}
                                 </span>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                {item.taxId}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 hover:underline">
-                                <a href={`https://${item.website}`} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
-                                    {item.website}
-                                </a>
                             </td>
                         </tr>
                     ))}
@@ -132,4 +109,4 @@ const ClientTable = () => {
     );
 };
 
-export default ClientTable;
+export default ClientTableUser;
