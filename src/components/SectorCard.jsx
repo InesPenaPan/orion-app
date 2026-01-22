@@ -1,8 +1,42 @@
-
+import React, { useState, useEffect } from 'react';
 import RatioItem from '../basics/RatioItem';
 import TrendItem from '../basics/TrendItem';
 
 const SectorCard = ({ ticker }) => {
+    const [marketData, setMarketData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchSectorData = async () => {
+            if (!ticker) return;
+            setLoading(true);
+            
+            try {
+                const gatewayConfig = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        targetMethod: "GET",
+                        queryParams: {},
+                        body: {}
+                    })
+                };
+
+                const response = await fetch(`/api/ms-sector-analysis/market/${ticker}`, gatewayConfig);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    setMarketData(data);
+                }
+            } catch (error) {
+                console.error("Error fetching sector metrics:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchSectorData();
+    }, [ticker]);
 
     const ratiosData = [
         { title: 'Metric #1', value: '0.56', isPositive: false },
