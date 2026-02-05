@@ -38,7 +38,26 @@ docker compose up --build -d
 Una vez levantado el contenedor, la aplicación estará disponible en la siguiente dirección: http://localhost:3000/
 
 
-### 📂 Estructura del Proyecto
+## 📂 Estructura del Proyecto
+
+```bash
+orion-app/
+├── public/                     # Activos estáticos públicos
+├── src/                        # Código fuente de la aplicación
+│   ├── assets/                 # Recursos multimedia (imágenes, iconos)
+│   ├── basics/                 # Átomos y elementos mínimos de UI (RatioItem, NewsItem)
+│   ├── components/             # Bloques funcionales reutilizables (FinanceCard, SideBar)
+│   ├── pages/                  # Vistas principales y contenedores de ruta (HomePage, ClientDetailPage)
+│   ├── app.css                 # Estilos globales de la aplicación
+│   ├── App.jsx                 # Configuración de rutas y estados globales
+│   └── main.jsx                # Punto de entrada de la aplicación y renderizado en el DOM
+├── docker-compose.yml          # Orquestación del despliegue del frontend
+├── Dockerfile                  # Definición de la imagen del contenedor (entorno de producción)
+├── index.html                  # Plantilla HTML base del proyecto
+├── package.json                # Gestión de scripts y dependencias de NPM
+├── README.md                   # Documentación técnica del componente
+└── vite.config.js              # Configuración del motor de construcción Vite
+```
 
 
 
