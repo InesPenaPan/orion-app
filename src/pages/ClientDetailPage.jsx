@@ -65,7 +65,7 @@ const ClientDetailPage = () => {
 
                     {/* NEWS */}
                     <div className="max-w-7xl mx-auto w-full"> 
-                        <NewsCard ticker={clientFullName} />
+                        <NewsCard company={clientFullName} />
                     </div>
                 </main>
             </div>

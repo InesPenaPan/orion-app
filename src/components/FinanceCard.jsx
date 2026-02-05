@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import RatioItem from '../basics/RatioItem';
 import TimeSeries from '../basics/TimeSeries';
 import NewsItem from '../basics/NewsItem';
+import CardTitle from '../basics/CardTitle';
 
 /**
  * Displays financial health metrics, revenue growth trends, and real-time news 
@@ -66,20 +67,10 @@ const FinanceCard = ({ ticker }) => {
     return (
         <div className="w-full bg-white rounded-xl shadow-xl overflow-hidden py-6 px-8 border border-gray-100 transition duration-300 hover:shadow-2xl">
             
-            {/* Header */}
-            <div className="flex items-center justify-between mb-8 border-b border-gray-50 pb-4">
-                <div className="flex items-center space-x-4">
-                    <h2 className="text-2xl font-bold text-gray-900">
-                        Finance Module
-                    </h2>
-                    {ticker && (
-                        <span className="px-4 py-1 rounded-lg text-sm font-mono font-bold border shadow-sm bg-[#00204A] text-white border-[#00204A]">
-                            {ticker}
-                        </span>
-                    )}
-                </div>
-                {loading && <div className="text-indigo-500 text-xs font-bold animate-pulse tracking-widest uppercase">Syncing...</div>}
-            </div>
+            <CardTitle 
+                title="Finance Module" 
+                ticker={ticker} 
+            />
             
             <div className="grid grid-cols-1 lg:grid-cols-10 gap-10 items-start">
 

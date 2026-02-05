@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
+import CardTitle from '../basics/CardTitle';
+
 /**
  * Formats a numeric value into a 'k' string format with one decimal.
- * Example: 320000 -> $ 320.0k
  */
 const formatK = (value) => {
     const num = value ? value / 1000 : 0;
@@ -69,16 +70,14 @@ const OverviewCard = () => {
      * * Mapping API response keys to the UI visual structure.
      */
     const metrics = [
-        { title: 'Won', value: formatK(data?.wonThisYear), colorClass: "text-blue-600" },
-        { title: 'Lost', value: formatK(data?.lost), colorClass: "text-orange-500" },
+        { title: 'Won', value: formatK(data?.won), colorClass: "text-blue-600" },
+        { title: 'Lost', value: formatK(data?.lost), colorClass: "text-red-500" },
         { title: 'Pending', value: formatK(data?.pending), colorClass: "text-yellow-600" },
     ];
 
     return (
         <div className="bg-white rounded-xl shadow-xl overflow-hidden p-6 border border-gray-100 transition duration-300 hover:shadow-2xl">
-            <div className="flex items-center space-x-2 mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Overview</h2>
-            </div>
+            <CardTitle title="My Operations" />
             
             <div className="flex flex-col sm:flex-row justify-between divide-y sm:divide-y-0 sm:divide-x divide-gray-200">
                 {metrics.map((metric, index) => (

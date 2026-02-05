@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Zap, Building2, BookOpen } from 'lucide-react';
 import RatioItem from '../basics/RatioItem';
+import CardTitle from '../basics/CardTitle';
 
 /**
  * This component acts as a high-level dashboard for sectoral analysis. It aggregates 
@@ -89,24 +90,10 @@ const SectorCard = ({ ticker }) => {
     return (
         <div className="bg-white rounded-xl shadow-xl overflow-hidden p-6 border border-gray-100 transition duration-300 hover:shadow-2xl">
             
-            {/* Header */}
-            <div className="flex items-center justify-between mb-8 border-b border-gray-50 pb-4">
-                <div className="flex items-center space-x-3">
-                    <h2 className="text-2xl font-bold text-[#00204A] tracking-tight italic">
-                        Sector Analysis
-                    </h2>
-                    {ticker && (
-                        <span className="px-4 py-1 rounded-lg text-sm font-mono font-bold border shadow-sm bg-[#00204A] text-white border-[#00204A]">
-                            {ticker}
-                        </span>
-                    )}
-                </div>
-                {loading && (
-                    <div className="text-[#1E90FF] text-[10px] font-bold animate-pulse uppercase tracking-[0.2em]">
-                        Syncing...
-                    </div>
-                )}
-            </div>
+            <CardTitle 
+                title="Sector Analysis" 
+                ticker={ticker} 
+            />
 
             {/* Snapshots Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">

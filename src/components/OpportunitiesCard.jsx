@@ -1,5 +1,6 @@
 import OpportunitiesTableUser from '../basics/OpportunitiesTableUser';
 import OpportunitiesTableClient from '../basics/OpportunitiesTableClient';
+import CardTitle from '../basics/CardTitle';
 
 /**
  * This component acts as a generic UI Container (Wrapper).
@@ -11,11 +12,7 @@ const OpportunitiesCard = ({ type = 'user', clientId = null }) => {
     return (
         <div className="bg-white rounded-xl shadow-xl overflow-hidden p-6 border border-gray-100 transition duration-300 hover:shadow-2xl ">
             
-            <div className="flex items-center space-x-2 mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">
-                    Opportunities Pipeline
-                </h2>
-            </div>
+            <CardTitle title="Pipeline" />
             
             <div className="max-h-120 overflow-auto">
                 {type === 'user' ? (
