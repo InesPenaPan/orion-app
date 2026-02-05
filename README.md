@@ -1,8 +1,17 @@
-# ✨ Aplicación Orion Analytics
+# ✨ Orion Analytics
 
 **Componente del Trabajo de Fin de Máster (TFM)** > *Máster en Ingeniería de Software y Sistemas Informáticos (MSSI)*
 
-Orion Analytics es una plataforma  diseñada para transformar datos brutos en inteligencia estratégica y accionable para nuestros clientes. El objetivo principal es proporcionar una visión 360° de sus operaciones, mercados y clientes en tiempo real, permitiendo a los líderes empresariales tomar decisiones rápidas y fundamentadas.
+Este componente es la interfaz de usuario de la plataforma, desarrollada **con React.js**.
+
+La aplicación actúa como una plataforma de Business Intelligence que centraliza datos internos del CRM y capas de información pública para el perfilado avanzado de clientes B2B. El sistema integra las siguientes dimensiones de análisis:
+
+* Información financiera sobre el cliente.
+* Indicadores de rendimiento del sector al que pertenece el cliente.
+* Noticias relacionadas.
+* Registros operativos internos de la empresa.
+
+
 
 ## 🔧 Descripción Técnica del Frontend
 
