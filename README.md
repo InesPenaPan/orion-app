@@ -15,7 +15,11 @@ La aplicación actúa como una plataforma de Business Intelligence que centraliz
 
 ## 🛠️ Stack
 
-El frontend de Orion Analytics está construido bajo un stack de desarrollo moderno, rápido y altamente adaptable.
+El frontend está desarrollado con las siguientes tecnologías:
+
+* **React**: Construcción de la interfaz de usuario modular y reactiva.
+* **Vite**: Empaquetador y servidor de desarrollo ultrarrápido, optimizado para React.
+* **Tailwind**: Framework CSS utility-first para un desarrollo de diseño rápido y responsivo.
 
 ### Stack Tecnológico
 
@@ -26,12 +30,12 @@ El frontend de Orion Analytics está construido bajo un stack de desarrollo mode
 | Estilizado | Tailwind CSS | Framework CSS utility-first para un desarrollo de diseño rápido y responsivo. | çç
 
 ## ⚡ Ejecución
-
-Para iniciar el proyecto en modo desarrollo:
+Navega hasta el directorio raíz del proyecto y ejecuta el siguiente comando en tu terminal:
 
 ```bash
-npm run dev
+docker compose up --build -d
 ```
+Una vez levantado el contenedor, la API estará disponible en la siguiente dirección: 
 
 
 
