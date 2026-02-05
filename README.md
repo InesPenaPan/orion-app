@@ -7,13 +7,13 @@ Este componente es la interfaz de usuario de la plataforma, desarrollada **con R
 La aplicación actúa como una plataforma de Business Intelligence que centraliza datos internos del CRM y capas de información pública para el perfilado avanzado de clientes B2B. El sistema integra las siguientes dimensiones de análisis:
 
 * Información financiera sobre el cliente.
-* Indicadores de rendimiento del sector al que pertenece el cliente.
+* Indicadores de rendimiento sectorial.
 * Noticias relacionadas.
 * Registros operativos internos de la empresa.
 
 
 
-## 🔧 Descripción Técnica del Frontend
+## 🛠️ Stack
 
 El frontend de Orion Analytics está construido bajo un stack de desarrollo moderno, rápido y altamente adaptable.
 
