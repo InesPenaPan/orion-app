@@ -35,7 +35,7 @@ Navega hasta el directorio raíz del proyecto y ejecuta el siguiente comando en 
 ```bash
 docker compose up --build -d
 ```
-Una vez levantado el contenedor, la API estará disponible en la siguiente dirección: 
+Una vez levantado el contenedor, la API estará disponible en la siguiente dirección: http://localhost:3000/
 
 
 
