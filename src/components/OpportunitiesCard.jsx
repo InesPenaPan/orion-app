@@ -1,5 +1,4 @@
-import OpportunitiesTableUser from '../basics/OpportunitiesTableUser';
-import OpportunitiesTableClient from '../basics/OpportunitiesTableClient';
+import OpportunitiesTable from '../basics/OpportunitiesTable';
 import CardTitle from '../basics/CardTitle';
 
 /**
@@ -16,9 +15,9 @@ const OpportunitiesCard = ({ type = 'user', clientId = null }) => {
             
             <div className="max-h-120 overflow-auto">
                 {type === 'user' ? (
-                    <OpportunitiesTableUser />
+                    <OpportunitiesTable showResponsible={false} />
                 ) : (
-                    <OpportunitiesTableClient clientId={clientId} />
+                    <OpportunitiesTable showClient={false} clientId={clientId} />
                 )}
             </div>
         </div>

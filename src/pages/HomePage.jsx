@@ -31,14 +31,13 @@ const HomePage = () => {
             </div>
             
             {/* MAIN CONTENT AREA*/}
-            <div 
-                className={`flex flex-col flex-grow min-h-screen ${contentMarginClass} transition-all duration-300`}
-            >
+            <div className={`flex flex-col flex-grow min-h-screen ${contentMarginClass} transition-all duration-300`}>
+                
                 <Header />
 
                 <main className="flex-grow p-8 space-y-8"> 
                     
-                    <h1 className="text-4xl font-bold text-gray-900"> Dashboard Overview </h1>
+                    <h1 className="text-4xl font-bold text-gray-900"> My Operations </h1>
                     
                     {/* ROW 1 */}
                     <div className="w-full">
@@ -50,7 +49,7 @@ const HomePage = () => {
                         <OpportunitiesCard />
                         <ClientCard />
                     </div>
-                    
+         
                 </main>
             </div>
         </div>

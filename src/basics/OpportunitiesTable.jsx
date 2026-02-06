@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
 
 /**
- * Helper function to determine Tailwind CSS classes based on the opportunity stage.
+ * Helper function to determine Premium Soft UI classes.
+ * Uses lowercase and subtle borders for a clean aesthetic.
  */
 export const getStatusClasses = (status) => {
+    const baseClasses = 'px-3 py-0.5 text-xs font-medium border rounded-full uppercase tracking-tight shadow-sm';
+
     switch (status) {
         case 'Won':
         case 'Closed':
-            return 'bg-green-100 text-green-700';
+            return `${baseClasses} bg-emerald-50 text-emerald-700 border-emerald-200`;
         case 'Lost':
-            return 'bg-red-100 text-red-700';
+            return `${baseClasses} bg-rose-50 text-rose-700 border-rose-200`;
         default:
-            return 'bg-yellow-100 text-yellow-700';
+            return `${baseClasses} bg-amber-50 text-amber-700 border-amber-200`;
     }
 };
 
@@ -38,24 +41,35 @@ export const formatDate = (dateString) => {
     });
 };
 
-const OpportunitiesTable = () => {
+/**
+ * OpportunitiesTable Component
+ * @param {boolean} showResponsible - Toggles the 'Responsible' column.
+ * @param {boolean} showClient - Toggles the 'Client' column visibility.
+ * @param {string|number} clientId - If provided, fetches opportunities specific to a client.
+ */
+const OpportunitiesTable = ({ showResponsible = true, showClient = true, clientId = null }) => {
     const [opportunities, setOpportunities] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    /**
+     * Dynamic Endpoint Logic:
+     * 1. If clientId is provided, use the client-specific route.
+     * 2. Otherwise, check showResponsible to decide between global or user-specific data.
+     */
+    const endpoint = clientId 
+        ? `/api/ms-crm/opportunities/client/${clientId}`
+        : showResponsible 
+            ? '/api/ms-crm/opportunities' 
+            : '/api/ms-crm/opportunities/user/1';
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                /**
-                 * API CALL VIA VITE PROXY
-                 * We use '/api' prefix so Vite intercepts the request and forwards it 
-                 * to the 'orion-gateway' container within the Docker network.
-                 */
-                const response = await fetch('/api/ms-crm/opportunities', {
+                setLoading(true);
+                const response = await fetch(endpoint, {
                     method: 'POST', 
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         targetMethod: "GET",
                         queryParams: {},
@@ -63,11 +77,13 @@ const OpportunitiesTable = () => {
                     })
                 });
 
-                if (!response.ok) throw new Error(`Error ${response.status}: Fallo al conectar con el Gateway`);
+                if (!response.ok) throw new Error(`Error ${response.status}: Failed to reach the Gateway`);
 
                 const rawData = await response.json();
-                setOpportunities(rawData);
+                const dataToSet = Array.isArray(rawData) ? rawData : (rawData.opportunities || []);
+                setOpportunities(dataToSet);
             } catch (err) {
+                console.error("[OpportunitiesTable] Fetch error:", err);
                 setError(err.message);
             } finally {
                 setLoading(false);
@@ -75,54 +91,76 @@ const OpportunitiesTable = () => {
         };
 
         fetchData();
-    }, []);
-
-    if (loading) return <div className="p-10 text-center text-gray-500 italic">Obteniendo pipeline desde el CRM...</div>;
+    }, [endpoint]); 
+    
+    if (loading) return <div className="p-10 text-center text-gray-400 italic animate-pulse font-medium">Synchronizing CRM data...</div>;
     if (error) return <div className="p-10 text-center text-red-500 font-bold underline">Error: {error}</div>;
 
     return (
-        <div className="overflow-x-auto shadow-md rounded-lg">
-            <table className="min-w-full divide-y divide-gray-200">
+        /* border-2 and border-gray-200 for a more defined, "gordo" look */
+        <div className="overflow-x-auto rounded-xl border-2 border-gray-200 bg-white shadow-md">
+            <table className="min-w-full divide-y-2 divide-gray-200">
                 <thead className="bg-gray-50 sticky top-0 z-10"> 
                     <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Opportunity</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Description</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Client</th>
-                        <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Amount</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Responsible</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
-                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Stage</th>
+                        <th className="px-6 py-3 text-left text-xs font-normal text-gray-500 uppercase tracking-wider">Opportunity</th>
+                        <th className="px-6 py-3 text-left text-xs font-normal text-gray-500 uppercase tracking-wider">Description</th>
+                        
+                        {showClient && <th className="px-6 py-3 text-left text-xs font-normal text-gray-500 uppercase tracking-wider">Client</th>}
+                        
+                        <th className="px-6 py-3 text-right text-xs font-normal text-gray-500 uppercase tracking-wider">Amount</th>
+                        
+                        {showResponsible && <th className="px-6 py-3 text-left text-xs font-normal text-gray-500 uppercase tracking-wider">Responsible</th>}
+                        
+                        <th className="px-6 py-3 text-center text-xs font-normal text-gray-500 uppercase tracking-wider">Stage</th>
+                        <th className="px-6 py-3 text-left text-xs font-normal text-gray-500 uppercase tracking-wider">Created</th>
                     </tr>
                 </thead>
-                {/* Table Body Section - Mapping over fetched data */}
-                <tbody className="bg-white divide-y divide-gray-200">
-                    {opportunities.map((item) => (
-                        <tr key={item.opportunityId} className="hover:bg-gray-50 transition duration-150">
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-blue-900">
-                                {item.title}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
-                                {item.description || 'No description'}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                {item.client?.companyName || 'N/A'}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold text-gray-800">
-                                {formatCurrency(item.amountValue)}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {item.user?.fullName || 'Unassigned'}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 italic">
-                                {formatDate(item.createdAt)}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-center">
-                                <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusClasses(item.stage)}`}>
-                                    {item.stage}
-                                </span>
+                <tbody className="bg-white divide-y divide-gray-100">
+                    {opportunities.length > 0 ? (
+                        opportunities.map((item) => (
+                            <tr key={item.opportunityId} className="hover:bg-gray-50 transition duration-150">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-[#002D6B]">
+                                    {item.title}
+                                </td>
+
+                                <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate font-medium">
+                                    {item.description || 'no description'}
+                                </td>
+                                
+                                {showClient && (
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 font-medium">
+                                        {item.client?.companyName || 'N/A'}
+                                    </td>
+                                )}
+                                
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold text-gray-800">
+                                    {formatCurrency(item.amountValue)}
+                                </td>
+                                
+                                {showResponsible && (
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {item.user?.fullName || 'unassigned'}
+                                    </td>
+                                )}
+                                
+                                <td className="px-6 py-4 whitespace-nowrap text-center">
+                                    <span className={getStatusClasses(item.stage)}>
+                                        {item.stage.toLowerCase()}
+                                    </span>
+                                </td>
+                                
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400 italic font-light">
+                                    {formatDate(item.createdAt)}
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan={10} className="px-6 py-10 text-center text-gray-400">
+                                No records found in this pipeline.
                             </td>
                         </tr>
-                    ))}
+                    )}
                 </tbody>
             </table>
         </div>
