@@ -11,7 +11,7 @@ const mySectors = [
 const ClientCard = () => {
   return (
     <div className="bg-white rounded-xl shadow-xl overflow-hidden p-6 border border-gray-100 transition duration-300 hover:shadow-2xl">
-      <CardTitle title="Clients" />
+      <CardTitle title="Client Portfolio" />
       <ClientGraphic data={mySectors} />
       <div className="max-h-60 overflow-y-auto border border-gray-200 rounded-lg">
         <ClientTableUser /> 

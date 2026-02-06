@@ -39,7 +39,7 @@ const OpportunityListPage = () => {
                 <Header />
 
                 <main className="flex-grow p-8 space-y-8"> 
-                    <h2 className="text-3xl font-bold text-gray-900 mb-3"> All Oportunities </h2>
+                    <h1 className="text-4xl font-bold text-gray-900"> All Opportunities </h1>
 
                     {/* Seacrh Bar */}
                     <div className="relative w-ful">

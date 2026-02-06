@@ -8,10 +8,10 @@ const TimeSeries = ({ data, labels }) => {
         return <div className="h-full flex items-center justify-center text-gray-400 italic text-xs">No data available</div>;
     }
 
-    const width = 400;
-    const height = 200;
-    const paddingX = 40;
-    const paddingY = 30;
+    const width = 500;
+    const height = 350;
+    const paddingX = 20;
+    const paddingY = 20;
     const centerY = height / 2;
 
     const formatLabel = (dateStr) => {
@@ -44,7 +44,7 @@ const TimeSeries = ({ data, labels }) => {
                     </linearGradient>
                 </defs>
 
-                <g className="text-[10px] fill-[#00204A] font-bold opacity-40">
+                <g className="text-[18px] fill-[#00204A] font-bold opacity-40">
                     <text x="0" y={centerY - (centerY - paddingY)}>+50%</text>
                     <text x="0" y={centerY + 4}>0%</text>
                     <text x="0" y={centerY + (centerY - paddingY)}>-50%</text>
@@ -75,14 +75,14 @@ const TimeSeries = ({ data, labels }) => {
                             cy={p.y}
                             r="4.5"
                             fill="#FFD700"
-                            stroke="#00204A"
+                            stroke="rgba(255, 252, 77, 0.94)"
                             strokeWidth="1.5"
                             className="transition-transform duration-300 group-hover:scale-125 shadow-sm"
                         />
                         
                         <g className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-                            <rect x={p.x - 22} y={p.y - 30} width="44" height="20" rx="4" fill="#00204A" shadow-xl />
-                            <text x={p.x} y={p.y - 16} textAnchor="middle" className="text-[10px] font-bold fill-[#FFD700]">
+                            <rect x={p.x - 30} y={p.y - 45} width="60" height="30" rx="4" fill="#00204A" shadow-xl />
+                            <text x={p.x} y={p.y - 24} textAnchor="middle" className="text-[20px] font-bold fill-[#FFD700]">
                                 {(p.val * 100).toFixed(1)}%
                             </text>
                         </g>
@@ -92,7 +92,7 @@ const TimeSeries = ({ data, labels }) => {
 
             <div className="flex justify-between w-full px-[40px] mt-4">
                 {labels.map((l, i) => (
-                    <span key={i} className="text-[10px] font-black text-[#00204A] opacity-60 uppercase tracking-tighter">
+                    <span key={i} className="text-[12px] font-black text-[#00204A] opacity-60 uppercase tracking-tighter">
                         {formatLabel(l)}
                     </span>
                 ))}

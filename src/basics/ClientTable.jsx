@@ -93,11 +93,11 @@ const ClientTable = () => {
             <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50 sticky top-0 z-10"> 
                     <tr>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Company</th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Ticker</th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Sector</th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tax ID</th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Website</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Client Name</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ticker</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Sector</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tax ID</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Website</th>
                     </tr>
                 </thead>
                     
@@ -112,10 +112,10 @@ const ClientTable = () => {
                                 {item.companyName}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono bg-gray-50/50">
-                                {item.ticker || 'Private'}
+                                {item.ticker || 'N/A'}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                <span className="px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 border border-indigo-200">
+                            <td className="px-6 py-3 whitespace-nowrap">
+                                <span className="inline-flex items-center px-3 py-0.5 rounded-full text-[12px] font-bold bg-slate-100/70 text-slate-500 border border-slate-200/50 uppercase tracking-wider shadow-sm">
                                     {formatSector(item.sector)}
                                 </span>
                             </td>

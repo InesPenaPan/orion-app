@@ -5,6 +5,7 @@ import SideBar from '../components/SideBar';
 import Header from '../basics/Header';
 import ClientTableUser from '../basics/ClientTableUser';
 import ClientGraphic from '../basics/ClientGraphic';
+import CardTitle from '../basics/CardTitle';
 
 
 const segmentationData = [
@@ -44,7 +45,10 @@ const ClientPortfolioPage = () => {
                 <Header />
 
                 <main className="flex-grow p-8 space-y-8"> 
-                    <h2 className="text-3xl font-bold text-gray-900 mb-3"> My Client Portfolio </h2>
+                    <h1 className="text-4xl font-bold text-gray-900"> Client Portfolio </h1>
+                    <p className="text-gray-500 -mt-6 text-lg">
+                        Clients from <span className="font-semibold text-blue-600">Inés Peña</span>
+                    </p>
 
                     {/* LEFT COLUMN */}
                     <div className="flex flex-col lg:flex-row gap-8 w-full items-start">
@@ -64,7 +68,7 @@ const ClientPortfolioPage = () => {
 
                         {/* RIGHT COLUMN */}
                         <div className="w-full lg:w-6/12 mt-4 lg:mt-0 bg-white rounded-xl shadow-xl p-5 border border-gray-100 transition duration-300 hover:shadow-2xl"> 
-                            <h3 className="text-xl font-bold text-gray-900 mb-4">Client Segmentation</h3>
+                            <CardTitle title="Client Segmentation" />
                             <ClientGraphic data={segmentationData} />
                         </div>
                         

@@ -90,10 +90,10 @@ const FinanceCard = ({ ticker }) => {
 
                 {/* Section 2: Expanded Chart (40%) */}
                 <div className="lg:col-span-4 border-x border-gray-100 px-8 h-full min-h-[250px] flex flex-col justify-center">
-                    <h3 className="text-[10px] font-black text-gray-400 uppercase mb-6 tracking-[0.3em] text-center">
+                    <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center mb-6">
                         Revenue Growth Trend (%)
                     </h3>
-                    <div className="h-56 w-full">
+                    <div className="h-70 w-full">
                         <TimeSeries
                             data={financialData?.quarterly_revenue_growth} 
                             labels={financialData?.report_dates}

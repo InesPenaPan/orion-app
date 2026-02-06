@@ -102,23 +102,23 @@ const OpportunitiesTable = ({ showResponsible = true, showClient = true, clientI
             <table className="min-w-full divide-y-2 divide-gray-200">
                 <thead className="bg-gray-50 sticky top-0 z-10"> 
                     <tr>
-                        <th className="px-6 py-3 text-left text-xs font-normal text-gray-500 uppercase tracking-wider">Opportunity</th>
-                        <th className="px-6 py-3 text-left text-xs font-normal text-gray-500 uppercase tracking-wider">Description</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Opportunity</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Description</th>
                         
-                        {showClient && <th className="px-6 py-3 text-left text-xs font-normal text-gray-500 uppercase tracking-wider">Client</th>}
+                        {showClient && <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Client</th>}
                         
-                        <th className="px-6 py-3 text-right text-xs font-normal text-gray-500 uppercase tracking-wider">Amount</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
                         
-                        {showResponsible && <th className="px-6 py-3 text-left text-xs font-normal text-gray-500 uppercase tracking-wider">Responsible</th>}
+                        {showResponsible && <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Responsible</th>}
                         
-                        <th className="px-6 py-3 text-center text-xs font-normal text-gray-500 uppercase tracking-wider">Stage</th>
-                        <th className="px-6 py-3 text-left text-xs font-normal text-gray-500 uppercase tracking-wider">Created</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Stage</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created At</th>
                     </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-100">
                     {opportunities.length > 0 ? (
                         opportunities.map((item) => (
-                            <tr key={item.opportunityId} className="hover:bg-gray-50 transition duration-150">
+                            <tr key={item.opportunityId} className="hover:bg-blue-50 cursor-pointer transition duration-150 ease-in-out">
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-[#002D6B]">
                                     {item.title}
                                 </td>

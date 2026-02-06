@@ -45,11 +45,12 @@ const ClientDetailPage = () => {
 
                 <main className="flex-grow p-8 space-y-8"> 
 
-                    {/* CLIENT NAME & TICKER */}
+                    {/* CLIENT NAME */}
                     <div className="space-y-1">
-                        <h1 className="text-4xl font-bold text-gray-900">
-                            {clientFullName}
-                        </h1>
+                        <h1 className="text-4xl font-bold text-gray-900">  {clientFullName} </h1>
+                            <p className="text-gray-500 mt-0 text-lg">
+                                For more info:
+                            </p>
                     </div>
 
                     {/* FINANCE INFO */}

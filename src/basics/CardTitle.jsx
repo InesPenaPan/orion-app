@@ -3,7 +3,7 @@
  */
 const CardTitle = ({ title, ticker, loading }) => {
     return (
-        <div className="flex items-center justify-between mb-8 border-b border-gray-50 pb-4">
+        <div className="flex items-center justify-between mb-6 border-b border-gray-100 pb-4">
             <div className="flex items-center space-x-4">
                 <h2 className="text-2xl font-bold flex items-center text-[#00204A]">
                     {title}

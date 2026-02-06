@@ -82,9 +82,9 @@ const SectorCard = ({ ticker }) => {
      * Returns a Lucide icon based on the 'type' field in the suggestions JSON.
      */
     const getInsightIcon = (type) => {
-        if (type.includes('Company')) return <Building2 size={14} className="text-[#1E90FF]" />;
-        if (type.includes('Novel') || type.includes('Author')) return <BookOpen size={14} className="text-[#FFD700]" />;
-        return <Zap size={14} className="text-[#1E90FF]" />;
+        if (type.includes('Company')) return <Building2 size={18} className="text-slate-400" />;
+        if (type.includes('Novel') || type.includes('Author')) return <BookOpen size={18} className="text-slate-400" />;
+        return <Zap size={18} className="text-slate-400" />;
     };
 
     return (
@@ -109,8 +109,8 @@ const SectorCard = ({ ticker }) => {
 
             {/* Dynamic Industry Insights */}
             <div className="pt-2">
-                <h3 className="text-[10px] font-black text-[#00204A]/40 uppercase tracking-[0.3em] mb-6">
-                    {industryInsights?.industry_name || 'Industry'} Insights
+                <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center mb-6">
+                    {industryInsights?.industry_name || 'Industry'} Trends
                 </h3>
                 
                 <div className="grid grid-cols-1 gap-3">
