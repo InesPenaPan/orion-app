@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Zap, Building2, BookOpen } from 'lucide-react';
 import RatioItem from '../basics/RatioItem';
 import CardTitle from '../basics/CardTitle';
+import TrendChart from '../basics/TrendChart';
 
 /**
  * This component acts as a high-level dashboard for sectoral analysis. It aggregates 
@@ -18,10 +19,6 @@ const SectorCard = ({ ticker }) => {
             
             setLoading(true);
             try {
-                /**
-                 * We send a POST request to the Gateway. The Gateway's RequestTranslationFilter 
-                 * converts this into an internal GET request to the target microservice.
-                 */
                 const gatewayConfig = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -57,9 +54,6 @@ const SectorCard = ({ ticker }) => {
         fetchAllSectorData();
     }, [ticker]);
 
-    /**
-     * Transforms raw JSON objects into the format required by the RatioItem basic component.
-     */
     const ratiosData = marketData ? [
         { 
             title: 'Close Price', 
@@ -78,9 +72,6 @@ const SectorCard = ({ ticker }) => {
         }
     ] : [];
 
-    /**
-     * Returns a Lucide icon based on the 'type' field in the suggestions JSON.
-     */
     const getInsightIcon = (type) => {
         if (type.includes('Company')) return <Building2 size={18} className="text-slate-400" />;
         if (type.includes('Novel') || type.includes('Author')) return <BookOpen size={18} className="text-slate-400" />;
@@ -128,8 +119,10 @@ const SectorCard = ({ ticker }) => {
                                     <p className="text-[10px] text-gray-400 font-medium uppercase tracking-tighter">{item.type}</p>
                                 </div>
                             </div>
-                            <div className="h-1 w-12 bg-gray-100 rounded-full overflow-hidden">
-                                <div className="h-full bg-[#1E90FF] opacity-60 animate-pulse w-2/3"></div>
+
+                            {/* Contenedor flexible para el Sparkline */}
+                            <div className="flex items-center">
+                                <TrendChart keyword={item.title} />
                             </div>
                         </div>
                     ))}
