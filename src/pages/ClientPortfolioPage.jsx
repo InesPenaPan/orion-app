@@ -6,6 +6,14 @@ import Header from '../basics/Header';
 import ClientTableUser from '../basics/ClientTableUser';
 import ClientGraphic from '../basics/ClientGraphic';
 
+
+const segmentationData = [
+    { name: 'Technology', value: 450 },
+    { name: 'Finance', value: 380 },
+    { name: 'Healthcare', value: 250 },
+    { name: 'Retail', value: 210 },
+];
+
 const ClientPortfolioPage = () => {
     // Centralized state to control the collapse status of the sidebar.
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -57,7 +65,7 @@ const ClientPortfolioPage = () => {
                         {/* RIGHT COLUMN */}
                         <div className="w-full lg:w-6/12 mt-4 lg:mt-0 bg-white rounded-xl shadow-xl p-5 border border-gray-100 transition duration-300 hover:shadow-2xl"> 
                             <h3 className="text-xl font-bold text-gray-900 mb-4">Client Segmentation</h3>
-                            <ClientGraphic /> 
+                            <ClientGraphic data={segmentationData} />
                         </div>
                         
                     </div>

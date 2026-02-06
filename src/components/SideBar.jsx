@@ -1,7 +1,10 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Home, Users, UserCircle, Globe, Menu, TrendingUp, LogOut, Briefcase} from 'lucide-react'; 
 
-const SideBar = ({ userName = "Demo User", userEmail = "user2349@gmail.com", userIcon = UserCircle, isCollapsed, toggleCollapse }) => {
+/**
+ * * A responsive navigation sidebar that supports collapsed and expanded states.
+ */
+const SideBar = ({ userName = "Inés Peña", userEmail = "inespena@tx.com", userIcon = UserCircle, isCollapsed, toggleCollapse }) => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -11,7 +14,10 @@ const SideBar = ({ userName = "Demo User", userEmail = "user2349@gmail.com", use
             navigate('/'); 
         } 
     };
-    
+
+    /**
+     * Navigation menu configuration.
+     */
     const menuItems = [
         { name: 'Home', icon: Home, path: '/home' },
         { name: 'My Clients', icon: Users, path: '/portfolio' },
@@ -21,7 +27,6 @@ const SideBar = ({ userName = "Demo User", userEmail = "user2349@gmail.com", use
 
     return (
         <div 
-            // Controls width: 64px when collapsed (w-16) and 256px when expanded (w-64)
             className={`
                 flex flex-col h-screen 
                 bg-[#061a35] text-white 
@@ -50,8 +55,8 @@ const SideBar = ({ userName = "Demo User", userEmail = "user2349@gmail.com", use
                 
                 {!isCollapsed && (
                     <div className="flex flex-col items-center">
-                        <span className="text-base font-bold text-white leading-tight mb-0.5"> {userName} </span>
-                        <span className="text-xs text-gray-300"> {userEmail} </span>
+                        <span className="text-lg font-bold text-white leading-tight mb-0.5"> {userName} </span>
+                        <span className="text-sm text-gray-200"> {userEmail} </span>
                     </div>
                 )}
             </div>
