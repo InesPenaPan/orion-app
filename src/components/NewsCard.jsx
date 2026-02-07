@@ -1,20 +1,10 @@
 import React, { useState, useEffect } from 'react';
-
 import CardTitle from '../basics/CardTitle';
 
-
-/**
- * NewsCard: Reputation monitoring module.
- * This component orchestrates calls to the ms-news microservice via the API Gateway.
- */
 const NewsCard = ({ company }) => {
     const [newsData, setNewsData] = useState([]);
 
     useEffect(() => {
-        /**
-         * Asynchronously fetches corporate news using a protocol translation pattern.
-         * The Gateway's RequestTranslationFilter converts this POST into an internal GET request.
-         */
         const fetchNewsData = async () => {
             if (!company) return;
             try {
@@ -30,63 +20,72 @@ const NewsCard = ({ company }) => {
 
                 if (response.ok) {
                     const data = await response.json();
-                    // Maps the 'articles' collection provided by the news microservice payload
                     setNewsData(data.articles || []);
                 }
             } catch (error) {
-                console.error("Critical failure in information dimension fetch:", error);
+                console.error("Critical failure in intelligence dimension fetch:", error);
                 setNewsData([]);
             }
         };
 
         fetchNewsData();
     }, [company]);
-    
-    return (
-        <div className="bg-white rounded-xl shadow-xl p-6 border border-gray-100 transition duration-300 hover:shadow-2xl">
-            
-            <CardTitle title="Related News" />
 
-            {/* Scrollable news feed container */}
-            <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+    return (
+        <div className="relative overflow-hidden bg-[#ffffff] rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-gray-100 p-7 transition-all duration-500 hover:shadow-[0_40px_80px_rgba(0,0,0,0.08)]">
+            
+            {/* Elemento decorativo premium: línea de acento superior */}
+            <div className="absolute top-0 left-0 w-full h-[4px] bg-gradient-to-r from-[#00204A] via-[#1E90FF] to-[#FFD700]/50" /> 
+
+            <div className="flex items-center justify-between mb-8">
+                <CardTitle title="Related News" />
+            </div>
+
+            <div className="space-y-6 max-h-[520px] overflow-y-auto pr-3 custom-scrollbar scroll-smooth">
                 {newsData.length > 0 ? (
                     newsData.map((article, index) => (
                         <div 
                             key={index} 
-                            className="p-4 rounded-lg border-l-4 bg-slate-50 border-[#00204A] shadow-sm transition-all hover:shadow-md hover:translate-x-1"
+                            className="group relative p-5 rounded-xl bg-slate-50/50 border border-transparent hover:border-slate-200 hover:bg-white hover:shadow-sm transition-all duration-300"
                         >
-                            <div className="flex justify-between items-start mb-2">
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-[#1E90FF]">
-                                    {article.source}
-                                </span>
-                                <span className="text-[10px] text-gray-400 font-mono">
+                            <div className="flex justify-between items-center mb-3">
+                                <div className="px-2 py-1 rounded bg-[#00204A]/5 border border-[#00204A]/10">
+                                    <span className="text-[9px] font-black uppercase tracking-widest text-[#00204A]">
+                                        {article.source}
+                                    </span>
+                                </div>
+                                <span className="text-[15px] text-gray-400 font-mono tracking-tighter italic">
                                     {article.published_date}
                                 </span>
                             </div>
                             
-                            <h3 className="text-sm font-bold text-gray-800 mb-2 leading-snug">
-                                {article.title}
-                            </h3>
-                            
+                            {/* Título como enlace directo */}
                             <a 
                                 href={article.url} 
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                className="text-[10px] font-black uppercase tracking-tighter text-[#1E90FF] hover:text-[#00204A] transition-colors inline-flex items-center"
+                                className="block"
                             >
-                                Read Full Insight 
-                                <span className="ml-1 text-[#FFD700]">→</span>
+                                <h3 className="text-[15px] font-semibold text-[#1a1a1a] mb-2 leading-[1.4] hover:text-[#1E90FF] transition-colors duration-300 cursor-pointer">
+                                    {article.title}
+                                </h3>
                             </a>
+
+                            <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
+                                {article.description}
+                            </p>
                         </div>
                     ))
                 ) : (
-                    /* Fallback UI for empty states or connectivity issues */
-                    <div className="py-20 text-center rounded-lg border-2 border-dashed border-[#FFD700] bg-yellow-50/30">
-                        <p className="text-sm italic mb-2 text-[#00204A]">
-                            No live feed available for: <span className="font-bold uppercase text-[#1E90FF]">{company}</span>
+                    <div className="py-24 text-center rounded-2xl border border-dashed border-gray-200 bg-slate-50/30 backdrop-blur-sm">
+                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white shadow-sm mb-4">
+                            <span className="text-xl text-[#FFD700]">!</span>
+                        </div>
+                        <p className="text-xs font-medium text-[#00204A] mb-1">
+                            No active intelligence for <span className="text-[#1E90FF] tracking-widest font-black uppercase">{company}</span>
                         </p>
-                        <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#FFD700]">
-                            Verify Gateway & Service Discovery Logs
+                        <p className="text-[9px] uppercase tracking-widest text-gray-400 font-bold">
+                            Diagnostic: Check Node Discovery
                         </p>
                     </div>
                 )}

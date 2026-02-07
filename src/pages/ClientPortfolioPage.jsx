@@ -66,8 +66,12 @@ const ClientPortfolioPage = () => {
                             </div>
                         </div>
 
-                        {/* RIGHT COLUMN */}
-                        <div className="w-full lg:w-6/12 mt-4 lg:mt-0 bg-white rounded-xl shadow-xl p-5 border border-gray-100 transition duration-300 hover:shadow-2xl"> 
+                        {/* RIGHT COLUMN - Updated with Premium Accent Line */}
+                        <div className="relative overflow-hidden w-full lg:w-6/12 mt-4 lg:mt-0 bg-white rounded-xl shadow-xl p-5 border border-gray-100 transition duration-300 hover:shadow-2xl"> 
+                            
+                            {/* Elemento decorativo premium: línea de acento superior */}
+                            <div className="absolute top-0 left-0 w-full h-[4px] bg-gradient-to-r from-[#00204A] via-[#1E90FF] to-[#FFD700]/50" />
+                            
                             <CardTitle title="Client Segmentation" />
                             <ClientGraphic data={segmentationData} />
                         </div>

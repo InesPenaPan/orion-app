@@ -65,7 +65,10 @@ const FinanceCard = ({ ticker }) => {
     ] : [];
 
     return (
-        <div className="w-full bg-white rounded-xl shadow-xl overflow-hidden py-6 px-8 border border-gray-100 transition duration-300 hover:shadow-2xl">
+        <div className="relative overflow-hidden w-full bg-white rounded-xl shadow-xl py-6 px-8 border border-gray-100 transition duration-300 hover:shadow-2xl">
+            
+            {/* Elemento decorativo premium: línea de acento superior */}
+            <div className="absolute top-0 left-0 w-full h-[4px] bg-gradient-to-r from-[#00204A] via-[#1E90FF] to-[#FFD700]/50" />
             
             <CardTitle 
                 title="Finance Module" 

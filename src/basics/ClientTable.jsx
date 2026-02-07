@@ -79,7 +79,8 @@ const ClientTable = () => {
                     clientId: client.clientId,
                     clientFullName: client.companyName, 
                     clientTicker: client.ticker,       
-                    clientSector: client.sector
+                    clientSector: client.sector,
+                    clientWebsite: client.website
                 }
             }
         );

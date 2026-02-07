@@ -15,7 +15,8 @@ const ClientDetailPage = () => {
         clientId,
         clientFullName, 
         clientTicker, 
-        clientSector
+        clientSector,
+        clientWebsite
     } = location.state || {};
 
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -48,9 +49,17 @@ const ClientDetailPage = () => {
                     {/* CLIENT NAME */}
                     <div className="space-y-1">
                         <h1 className="text-4xl font-bold text-gray-900">  {clientFullName} </h1>
-                            <p className="text-gray-500 mt-0 text-lg">
-                                For more info:
-                            </p>
+                            <p className="text-gray-500 mt-0 text-lg flex items-center gap-2">
+                            For more info:
+                            <a 
+                                href={clientWebsite?.startsWith('http') ? clientWebsite : `https://${clientWebsite}`} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="text-blue-600 hover:text-blue-800 hover:underline font-medium"
+                            >
+                                {clientWebsite}
+                            </a>
+                        </p>
                     </div>
 
                     {/* FINANCE INFO */}

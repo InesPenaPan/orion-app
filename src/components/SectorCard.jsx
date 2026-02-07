@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Zap, Building2, BookOpen } from 'lucide-react';
+import { Zap, Building2, BookOpen, ChevronRight } from 'lucide-react';
 import RatioItem from '../basics/RatioItem';
 import CardTitle from '../basics/CardTitle';
 import TrendChart from '../basics/TrendChart';
@@ -12,6 +12,8 @@ const SectorCard = ({ ticker }) => {
     const [marketData, setMarketData] = useState(null);
     const [industryInsights, setIndustryInsights] = useState(null);
     const [loading, setLoading] = useState(true);
+    // Estado para controlar qué tendencia mostrar
+    const [expandedIndex, setExpandedIndex] = useState(null);
 
     useEffect(() => {
         const fetchAllSectorData = async () => {
@@ -78,15 +80,21 @@ const SectorCard = ({ ticker }) => {
         return <Zap size={18} className="text-slate-400" />;
     };
 
+    // Función para manejar el clic en la fila
+    const handleToggleTrend = (index) => {
+        setExpandedIndex(expandedIndex === index ? null : index);
+    };
+
     return (
-        <div className="bg-white rounded-xl shadow-xl overflow-hidden p-6 border border-gray-100 transition duration-300 hover:shadow-2xl">
+        <div className="relative overflow-hidden bg-white rounded-xl shadow-xl p-6 border border-gray-100 transition duration-300 hover:shadow-2xl">
             
+            <div className="absolute top-0 left-0 w-full h-[4px] bg-gradient-to-r from-[#00204A] via-[#1E90FF] to-[#FFD700]/50" />
+
             <CardTitle 
                 title="Sector Analysis" 
                 ticker={ticker} 
             />
 
-            {/* Snapshots Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                 {ratiosData.map((ratio, index) => (
                     <RatioItem 
@@ -98,7 +106,6 @@ const SectorCard = ({ ticker }) => {
                 ))}
             </div>
 
-            {/* Dynamic Industry Insights */}
             <div className="pt-2">
                 <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center mb-6">
                     {industryInsights?.industry_name || 'Industry'} Trends
@@ -106,24 +113,42 @@ const SectorCard = ({ ticker }) => {
                 
                 <div className="grid grid-cols-1 gap-3">
                     {industryInsights?.suggestions?.map((item, index) => (
-                        <div 
-                            key={index}
-                            className="group flex items-center justify-between p-3 rounded-lg border border-gray-50 bg-gray-50/30 hover:bg-white hover:border-[#1E90FF]/20 hover:shadow-sm transition-all duration-300"
-                        >
-                            <div className="flex items-center space-x-3">
-                                <div className="transition-colors">
-                                    {getInsightIcon(item.type)}
+                        <div key={index} className="flex flex-col">
+                            <div 
+                                onClick={() => handleToggleTrend(index)}
+                                className={`group flex items-center justify-between p-4 rounded-lg border cursor-pointer transition-all duration-300 ${
+                                    expandedIndex === index 
+                                    ? 'bg-white border-[#1E90FF] shadow-md' 
+                                    : 'border-gray-50 bg-gray-50/30 hover:bg-white hover:border-[#1E90FF]/20'
+                                }`}
+                            >
+                                <div className="flex items-center space-x-3">
+                                    <div className={`${expandedIndex === index ? 'text-[#1E90FF]' : 'text-slate-400'}`}>
+                                        {getInsightIcon(item.type)}
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-bold text-[#00204A]">{item.title}</p>
+                                        <p className="text-[10px] text-gray-400 font-medium uppercase tracking-tighter">{item.type}</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p className="text-sm font-bold text-[#00204A]">{item.title}</p>
-                                    <p className="text-[10px] text-gray-400 font-medium uppercase tracking-tighter">{item.type}</p>
+
+                                <div className="flex items-center space-x-2">
+                                    <span className={`text-[9px] font-bold uppercase tracking-widest transition-opacity ${expandedIndex === index ? 'opacity-0' : 'opacity-40'}`}>
+                                        View Trend
+                                    </span>
+                                    <ChevronRight 
+                                        size={16} 
+                                        className={`text-slate-300 transition-transform duration-300 ${expandedIndex === index ? 'rotate-90 text-[#1E90FF]' : ''}`} 
+                                    />
                                 </div>
                             </div>
 
-                            {/* Contenedor flexible para el Sparkline */}
-                            <div className="flex items-center">
-                                <TrendChart keyword={item.title} />
-                            </div>
+                            {/* Renderizado condicional del TrendChart con animación simple */}
+                            {expandedIndex === index && (
+                                <div className="mt-2 p-4 bg-white border border-gray-100 rounded-lg animate-in fade-in slide-in-from-top-2 duration-300">
+                                    <TrendChart keyword={item.title} />
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
