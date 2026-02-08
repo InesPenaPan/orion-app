@@ -4,7 +4,7 @@ import { Home, Users, UserCircle, Globe, Menu, TrendingUp, LogOut, Briefcase} fr
 /**
  * * A responsive navigation sidebar that supports collapsed and expanded states.
  */
-const SideBar = ({ userName = "Inés Peña", userEmail = "inespena@tx.com", userIcon = UserCircle, isCollapsed, toggleCollapse }) => {
+const SideBar = ({ userName = "Inés Peña", userEmail = "i.pena@nexushub.com", userIcon = UserCircle, isCollapsed, toggleCollapse }) => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -91,7 +91,7 @@ const SideBar = ({ userName = "Inés Peña", userEmail = "inespena@tx.com", user
                     {/* Company Name/Branding */}
                     <div className={`flex items-center text-gray-400 px-1`}>
                         <Briefcase className={`w-4 h-4 mr-3`} /> 
-                        <span className="text-sm">CRM Analytics Corp.</span> 
+                        <span className="text-sm">Nexus Hub Corp.</span> 
                     </div>
                 </div>
             )}

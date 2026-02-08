@@ -11,7 +11,9 @@ export const SECTOR_MAP = {
     'XLK': 'Technology',
     'XLV': 'Healthcare',
     'XLE': 'Energy',
-    'XLI': 'Industrials'
+    'XLI': 'Industrials',
+    'XLP': 'Consumer Staples',
+    'XLU': 'Utilities'
 };
 
 /**

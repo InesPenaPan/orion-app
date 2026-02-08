@@ -16,7 +16,7 @@ const ClientTableUser = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('/api/ms-crm/opportunities/clients/user/1', {
+                const response = await fetch('/api/ms-crm/opportunities/clients/user/3', {
                     method: 'POST', 
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
