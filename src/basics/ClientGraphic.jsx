@@ -1,10 +1,11 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
 const BLUE_PALETTE = [
+    '#00204A', 
     '#054A91', 
     '#1E90FF', 
     '#4DA8FF', 
-    '#99CFFF',
+    '#99CFFF'
 ];
 
 const renderColorfulLegendText = (value) => {

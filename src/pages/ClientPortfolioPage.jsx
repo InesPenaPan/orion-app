@@ -9,10 +9,11 @@ import CardTitle from '../basics/CardTitle';
 
 
 const segmentationData = [
-    { name: 'Technology', value: 450 },
-    { name: 'Finance', value: 380 },
-    { name: 'Healthcare', value: 250 },
-    { name: 'Retail', value: 210 },
+    { name: 'Energy', value: 2 },
+    { name: 'Technology', value: 3 },
+    { name: 'Consumer Staples', value: 2 },
+    { name: 'Industrials', value: 2 },
+    { name: 'Utilities', value: 1 }
 ];
 
 const ClientPortfolioPage = () => {

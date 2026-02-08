@@ -3,9 +3,11 @@ import ClientTableUser from '../basics/ClientTableUser';
 import CardTitle from '../basics/CardTitle';
 
 const mySectors = [
-    { name: 'Technology', value: 450 },
-    { name: 'Financial Services', value: 300 },
-    { name: 'Consumer Discretionary', value: 150 },
+    { name: 'Energy', value: 2 },
+    { name: 'Technology', value: 3 },
+    { name: 'Consumer Staples', value: 2 },
+    { name: 'Industrials', value: 2 },
+    { name: 'Utilities', value: 1 }
 ];
 
 const ClientCard = () => {
